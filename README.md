@@ -22,7 +22,7 @@ A Flutter-based real-time messaging app that allows users to chat seamlessly usi
 
 | Splash Screen                                                                 | Login Screen                                                                 | Sign-In Screen                                                               | Home Screen                                                                 | Side Drawer                                                                 |
 | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| ![image](https://github.com/user-attachments/assets/ab827af5-f788-4907-a7a4-6f651360a1d7) | ![image](https://github.com/user-attachments/assets/your-login-screen-image) | ![image](https://github.com/user-attachments/assets/your-sign-in-screen-image) | ![image](https://github.com/user-attachments/assets/your-home-screen-image) | ![image](https://github.com/user-attachments/assets/your-side-drawer-image) |
+| ![image](https://github.com/user-attachments/assets/ab827af5-f788-4907-a7a4-6f651360a1d7) | ![image](https://github.com/user-attachments/assets/a76880ef-2e37-4f6f-a2fa-c0d3677e7331) | ![image](https://github.com/user-attachments/assets/39b26cda-b650-45c0-99fe-3174795d42bd) | ![image](https://github.com/user-attachments/assets/1092a27b-03f5-4daa-b0eb-7db695cdb6f8) | ![image](https://github.com/user-attachments/assets/ecac4ffa-9e5e-4504-b1bc-c64150175826) |
 
 
 
