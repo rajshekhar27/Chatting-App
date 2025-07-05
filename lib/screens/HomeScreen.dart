@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (builder)=> ProfileScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (builder)=> ProfileScreen(user: list[0],)));
                 // Handle profile tap
               },
             ),
