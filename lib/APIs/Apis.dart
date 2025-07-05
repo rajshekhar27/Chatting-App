@@ -32,7 +32,24 @@ static Future<void> newUser() async{
       createdAt: time
   );
   await firestore1.collection('user').doc(user.uid).set(chatuser.toJson());
-
-
 }
+
+//getting all user data
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUser(){
+    return firestore1.collection('user').where('id', isNotEqualTo: user.uid).snapshots();
+  }
+  
+  //for storing selfinfo
+  static late ChatUser me;
+  
+  //getting current user data
+  static Future<void> selfInfo() async {
+    await firestore1.collection('user').doc(user.uid).get().then((value) async {
+      if(value.exists){
+        me=ChatUser.fromJson(value.data());
+      }else{
+        await newUser().then((onValue)=>selfInfo());
+      }
+    });
+  }
 }

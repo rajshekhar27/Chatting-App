@@ -45,15 +45,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: mq.height*0.03,
             ),
             //profile picture
-            ClipRRect(
-              borderRadius: BorderRadius.circular(mq.height*0.1),
-              child: CachedNetworkImage(
-                imageUrl: widget.user.image.toString(),
-                fit: BoxFit.fill,
-                width: mq.height*0.2,
-                height: mq.height*0.2,
-                errorWidget: (context, url, error) => Icon(Icons.person, color: Colors.black,),
-              ),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(mq.height*0.1),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.user.image.toString(),
+                    fit: BoxFit.fill,
+                    width: mq.height*0.2,
+                    height: mq.height*0.2,
+                    errorWidget: (context, url, error) => Icon(Icons.person, color: Colors.black,),
+                  ),
+                ),
+                Positioned(
+                  //
+                  bottom: 0,
+                  right: 0,
+                  child: InkWell(
+                    child: MaterialButton(
+                      onPressed: (){},
+                      color: Colors.white,
+                      shape: CircleBorder(),
+                      child: Icon(Icons.edit,color: Colors.grey,),
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             //for adding space

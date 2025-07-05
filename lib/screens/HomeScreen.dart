@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,7 +19,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late Stream<QuerySnapshot<Map<String, dynamic>>> AddedUser=Apis.getAllUser();
   late List<ChatUser> list=[];
+
+  @override
+  void initState() {
+    super.initState();
+    Apis.selfInfo();
+  }
 
   late Size mq;
 
@@ -71,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (builder)=> ProfileScreen(user: list[0],)));
+                Navigator.push(context, MaterialPageRoute(builder: (builder)=> ProfileScreen(user: Apis.me,)));
                 // Handle profile tap
               },
             ),
@@ -101,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-
+      //to add the user
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: FloatingActionButton(
@@ -111,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(Icons.add_comment_rounded),backgroundColor: Colors.cyan,),
       ),
       body: StreamBuilder(
-          stream: Apis.firestore1.collection('user').snapshots(),
+          stream: AddedUser,
           builder: (context,snapshot){
             switch(snapshot.connectionState)
             {
