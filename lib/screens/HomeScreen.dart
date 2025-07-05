@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:we_chat/Auth/LoginScreen.dart';
+import 'package:we_chat/screens/Profile_Screen.dart';
 import 'package:we_chat/widgets/chat_user_card.dart';
 
 import '../APIs/Apis.dart';
@@ -65,13 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               )
             ),
+            //profile
             ListTile(
               leading: Icon(Icons.person),
               title: Text('Profile'),
               onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (builder)=> ProfileScreen()));
                 // Handle profile tap
               },
             ),
+            //setting
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
@@ -79,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Handle settings tap
               },
             ),
+            //Logout
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout'),
