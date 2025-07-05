@@ -20,9 +20,10 @@ A Flutter-based real-time messaging app that allows users to chat seamlessly usi
 
 -> Responsive UI using MediaQuery
 
-| Splash Screen | Login Screen | Sign_in Screen | Home Screen | Side Drawer |
-|-------------|-----------------|-------------|-----------------|
-| ![image](https://github.com/user-attachments/assets/382b6ac8-8682-4562-a81a-bb9113434701) | ![image](https://github.com/user-attachments/assets/33aed119-25fb-4c45-92fb-065b11c70ca6) | ![image](https://github.com/user-attachments/assets/7d04a2b8-0566-4c29-a6c3-6c611b1dc29a) | ![image](https://github.com/user-attachments/assets/ec525ca4-bc76-4688-9969-9165f50bca95) |
+| Splash Screen                                                                 | Login Screen                                                                 | Sign-In Screen                                                               | Home Screen                                                                 | Side Drawer                                                                 |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| ![image](https://github.com/user-attachments/assets/ab827af5-f788-4907-a7a4-6f651360a1d7) | ![image](https://github.com/user-attachments/assets/your-login-screen-image) | ![image](https://github.com/user-attachments/assets/your-sign-in-screen-image) | ![image](https://github.com/user-attachments/assets/your-home-screen-image) | ![image](https://github.com/user-attachments/assets/your-side-drawer-image) |
+
 
 
 ## 🔧 Tech Stack
