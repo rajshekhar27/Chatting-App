@@ -23,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<ChatUser> list=[];
 
   @override
-  void initState() {
+  void
+  initState() {
     super.initState();
     Apis.selfInfo();
   }

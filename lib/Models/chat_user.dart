@@ -9,6 +9,9 @@
 /// Created_at : "20june"
 
 class ChatUser {
+
+
+
   ChatUser({
       required String? image,
     required String? name,
@@ -69,6 +72,12 @@ ChatUser copyWith({  String? image,
   email: email ?? _email,
   createdAt: createdAt ?? _createdAt,
 );
+
+  set name(String? name) => _name = name;
+  set about(String? about) => _about = about;
+  set image(String? image) => _image = image;
+
+
   String? get image => _image;
   String? get name => _name;
   String? get about => _about;

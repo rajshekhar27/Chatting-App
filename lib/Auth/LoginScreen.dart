@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
      return await FirebaseAuth.instance.signInWithCredential(credential);
    }catch(e){
      print("sign_in_with_google: $e");
-     Dialogs.showSnackbar(context, msg: "Somthing Went Wrong(Check your internet!!!)");
+     Dialogs.showSnackbar(context, msg: "Somthing Went Wrong(Check your internet!!!)", color: Colors.red);
      return null;
    }
   }

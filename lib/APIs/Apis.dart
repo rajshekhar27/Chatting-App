@@ -52,4 +52,9 @@ static Future<void> newUser() async{
       }
     });
   }
+
+  //for updating the selfInfo
+  static Future<void> updateSelfInfo() async{
+    await firestore1.collection("user").doc(user.uid).update({'name':me.name,'about':me.about});
+  }
 }
