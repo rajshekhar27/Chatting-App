@@ -16,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   final _formkey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 0,
                         child: InkWell(
                           child: MaterialButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              _bottomSheet();
+                            },
                             color: Colors.white,
                             shape: CircleBorder(),
                             child: Icon(Icons.edit,color: Colors.grey,),
@@ -171,5 +174,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+  //Show bottomsheet
+  void _bottomSheet(){
+    final Size mq= MediaQuery.of(context).size;
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20)
+          ),
+        ),
+        builder: (_){
+          return ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(top:mq.height *0.03, bottom: mq.height*0.08),
+            children: [
+              Text("Pick profile picture", textAlign: TextAlign.center,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+
+              Row(
+                children: [
+                  SizedBox(
+                    width: mq.width*0.15,
+                  ),
+                  SizedBox(
+                      height: mq.height* 0.1,
+                      width: mq.width* 0.3,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              backgroundColor: Colors.white,
+                              fixedSize: Size(mq.height* 0.1, mq.height* 0.1)
+                          ),
+                          onPressed: (){}, child: Image.asset("assets/images/photo.png"))),
+                  SizedBox(
+                    width: mq.width*0.07,
+                  ),
+                  ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          backgroundColor: Colors.white,
+                          fixedSize: Size(mq.height* 0.1, mq.height* 0.1)
+                        ),
+                          onPressed: (){}, child: Image.asset("assets/images/gallery.png")),
+                ],
+              ),
+            ],
+          );
+    });
   }
 }
