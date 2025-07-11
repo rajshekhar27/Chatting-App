@@ -19,187 +19,186 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //now it has all user
-  late Stream<QuerySnapshot<Map<String, dynamic>>> AddedUser=Apis.getAllUser();
+  late final Stream<QuerySnapshot<Map<String, dynamic>>> addedUser = Apis.getAllUser();
 
+  List<ChatUser> _list = [];
+  final List<ChatUser> _searchList = [];
 
-  late List<ChatUser> _list=[];
-
-  //storing all user for search
-  final List<ChatUser> _searchlist=[];
-
-  //for storing search status
-  bool _isSearching=false;
-
-  @override
-  void
-  initState() {
-    super.initState();
-    Apis.selfInfo();
-  }
-
+  bool _isSearching = false;
   late Size mq;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _initSelfInfo();
+  }
+
+  Future<void> _initSelfInfo() async {
+    await Apis.selfInfo(); // Ensure Apis.me is set
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    mq=MediaQuery.of(context).size;
+    mq = MediaQuery.of(context).size;
     return GestureDetector(
-      //hiding keyboard
-      onTap: (){
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: WillPopScope(
-        onWillPop: () {
-          if(_isSearching){
+        onWillPop: () async {
+          if (_isSearching) {
             setState(() {
-              _isSearching=!_isSearching;
+              _isSearching = false;
+              _searchList.clear();
             });
-            return Future.value(false);
-          }else{
-            return Future.value(true);
+            return false;
           }
+          return true;
         },
         child: Scaffold(
-          backgroundColor: Colors.grey.shade300,
           key: _scaffoldKey,
+          backgroundColor: Colors.grey.shade300,
           appBar: AppBar(
-            //profile drawer
             leading: Padding(
               padding: const EdgeInsets.all(9.0),
               child: InkWell(
-                onTap: (){
-                  _scaffoldKey.currentState!.openDrawer();
-                },
+                onTap: () => _scaffoldKey.currentState?.openDrawer(),
                 child: CircleAvatar(
-                  //radius: 18,
-                  backgroundImage: NetworkImage("${FirebaseAuth.instance.currentUser?.photoURL}"),
+                  backgroundImage: FirebaseAuth.instance.currentUser?.photoURL != null
+                      ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
+                      : const AssetImage('assets/images/default.png') as ImageProvider,
                 ),
               ),
             ),
-
-            //App title and search textForm
-            title: _isSearching? TextField(
+            title: _isSearching
+                ? TextField(
               autofocus: true,
               cursorColor: Colors.black,
-              style: TextStyle(fontSize: 16,letterSpacing: 0.4),
-              decoration: InputDecoration(
+              style: const TextStyle(fontSize: 16, letterSpacing: 0.4),
+              decoration: const InputDecoration(
                 hintText: "Email, Name...",
                 border: InputBorder.none,
               ),
-              //tracing change
               onChanged: (val) {
                 setState(() {
-                  _searchlist.clear();
-                  _searchlist.addAll(_list.where((user) =>
+                  _searchList.clear();
+                  _searchList.addAll(_list.where((user) =>
                   (user.name?.toLowerCase() ?? '').contains(val.toLowerCase()) ||
                       (user.email?.toLowerCase() ?? '').contains(val.toLowerCase())));
                 });
               },
-            ):Text("We Chat"),
+            )
+                : const Text("We Chat"),
             actions: [
-              //search button
-              IconButton(onPressed: (){
-                setState(() {
-                  _isSearching = !_isSearching;
-                  if (!_isSearching) _searchlist.clear();
-                });
-              }, icon: Icon(_isSearching? Icons.close : Icons.search)),
-
-              //three dot button
-              IconButton(onPressed: (){}, icon: Icon(Icons.more_vert))
+              //for search
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isSearching = !_isSearching;
+                      if (!_isSearching) _searchList.clear();
+                    });
+                  },
+                  icon: Icon(_isSearching ? Icons.close : Icons.search)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
             ],
           ),
-
-          //drawer elements
           drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
-                  decoration: BoxDecoration(color: Colors.cyan),
+                  decoration: const BoxDecoration(color: Colors.cyan),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage("${Apis.auth1.currentUser?.photoURL}"),
+                        backgroundImage: Apis.auth1.currentUser?.photoURL != null
+                            ? NetworkImage(Apis.auth1.currentUser!.photoURL!)
+                            : const AssetImage('assets/images/default.png') as ImageProvider,
                       ),
-                      Text("${Apis.auth1.currentUser?.displayName}", style: TextStyle(color: Colors.white, fontSize: 24)),
+                      const SizedBox(height: 8),
+                      Text(
+                        Apis.auth1.currentUser?.displayName ?? 'Guest',
+                        style: const TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ],
-                  )
+                  ),
                 ),
-                //profile
                 ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('Profile'),
+                  leading: const Icon(Icons.person),
+                  title: const Text('Profile'),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (builder)=> ProfileScreen(user: Apis.me,)));
-                    // Handle profile tap
-                  },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (builder) => ProfileScreen(user: Apis.me!),
+                      ),
+                    );
+                                    },
                 ),
-                //setting
                 ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('Settings'),
-                  onTap: () {
-                    // Handle settings tap
-                  },
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Settings'),
+                  onTap: () {},
                 ),
-                //Logout
                 ListTile(
-                  leading: Icon(Icons.logout),
-                  title: Text('Logout'),
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
                   onTap: () async {
                     await Apis.auth1.signOut();
                     await GoogleSignIn().signOut();
-                    // Navigate to login screen
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
                     );
                   },
                 ),
               ],
             ),
           ),
-
-          //to add the user
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: FloatingActionButton(
-              onPressed: (){
-                //Add members
+              onPressed: () {
+                // Add members logic
               },
-              child: Icon(Icons.add_comment_rounded),backgroundColor: Colors.cyan,),
+              backgroundColor: Colors.cyan,
+              child: const Icon(Icons.add_comment_rounded),
+            ),
           ),
           body: StreamBuilder(
-              stream: AddedUser,
-              builder: (context,snapshot){
-                switch(snapshot.connectionState)
-                {
-                  //if data is loading
-                  case ConnectionState.waiting:
-                  case ConnectionState.none:
-                      return Center(child: CircularProgressIndicator(),);
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    final data=snapshot.data?.docs;
-                    _list=data!.map((e)=> ChatUser.fromJson(e)).toList();
-                }
+            stream: addedUser,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return const Center(child: CircularProgressIndicator());
 
-                if(_list.isNotEmpty){
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  final data = snapshot.data?.docs;
+                  print(data);
+                  if (data == null || data.isEmpty) {
+                    return const Center(child: Text("No users found"));
+                  }
+
+                  _list = data.map((e) => ChatUser.fromJson(e.data())).toList();
+
                   return ListView.builder(
-                      padding: EdgeInsets.only(top: mq.height * 0.01),
-                      physics: BouncingScrollPhysics(),
-                      itemCount:_isSearching?_searchlist.length :_list.length,
-                      itemBuilder: (context, index){
-                        return ChatUserCard(user:_isSearching?_searchlist[index]: _list[index],);
-                        //return Text("Name: ${list[index]}");
-                      });
-                }else{
-                  return Center(child: Text("No Connection Found", style: TextStyle(fontSize: 20),));
-                }
-              })
+                    padding: EdgeInsets.only(top: mq.height * 0.01),
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: _isSearching ? _searchList.length : _list.length,
+                    itemBuilder: (context, index) {
+                      return ChatUserCard(
+                        user: _isSearching ? _searchList[index] : _list[index],
+                      );
+                    },
+                  );
+              }
+            },
+          ),
         ),
       ),
     );

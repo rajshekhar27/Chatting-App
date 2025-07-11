@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:we_chat/Models/chat_user.dart';
 import 'package:we_chat/UiHelper/Dialogs.dart';
 
@@ -16,6 +19,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  String? _image;
 
   final _formkey=GlobalKey<FormState>();
   @override
@@ -59,11 +64,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   //profile picture
                   Stack(
                     children: [
+
+                      _image != null ?
+                          //Local Image
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(mq.height*0.1),
+                          child: Image.file(
+                          File(_image!),
+                          fit: BoxFit.cover,
+                          width: mq.height*0.2,
+                          height: mq.height*0.2,
+                          ),
+                        )
+                      :
+                          //image from server
                       ClipRRect(
                         borderRadius: BorderRadius.circular(mq.height*0.1),
                         child: CachedNetworkImage(
                           imageUrl: widget.user.image.toString(),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           width: mq.height*0.2,
                           height: mq.height*0.2,
                           errorWidget: (context, url, error) => Icon(Icons.person, color: Colors.black,),
@@ -177,9 +196,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
   //Show bottomsheet
   void _bottomSheet(){
+
     final Size mq= MediaQuery.of(context).size;
     showModalBottomSheet(
         context: context,
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -192,12 +213,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: EdgeInsets.only(top:mq.height *0.03, bottom: mq.height*0.08),
             children: [
               Text("Pick profile picture", textAlign: TextAlign.center,style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: mq.height*0.02,
+              ),
 
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    width: mq.width*0.15,
-                  ),
+                  //accessing camera
                   SizedBox(
                       height: mq.height* 0.1,
                       width: mq.width* 0.3,
@@ -207,17 +230,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               backgroundColor: Colors.white,
                               fixedSize: Size(mq.height* 0.1, mq.height* 0.1)
                           ),
-                          onPressed: (){}, child: Image.asset("assets/images/photo.png"))),
+                          onPressed: () async {
+                            final ImagePicker picker = ImagePicker();
+                            // Pick an image.
+                            final XFile? image = await picker.pickImage(source: ImageSource.camera);
+                            if (image !=null){
+                              print(image.path);
+                              setState(() {
+                                _image=image.path;
+                              });
+                              Navigator.pop(context);
+                            }
+                          }, child: Image.asset("assets/images/photo.png"))),
+
+                  //Accessing Gallery
                   SizedBox(
-                    width: mq.width*0.07,
+                    height: mq.height* 0.1,
+                    width: mq.width* 0.3,
+                    child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            backgroundColor: Colors.white,
+                            fixedSize: Size(mq.height* 0.01, mq.width* 0.08)
+                          ),
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              // Pick an image.
+                              final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                              if (image !=null){
+                                print(image.path);
+                                setState(() {
+                                  _image=image.path;
+                                });
+                                Navigator.pop(context);
+                              }
+
+                            }, child: Image.asset("assets/images/gallery.png")),
                   ),
-                  ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
-                          backgroundColor: Colors.white,
-                          fixedSize: Size(mq.height* 0.1, mq.height* 0.1)
-                        ),
-                          onPressed: (){}, child: Image.asset("assets/images/gallery.png")),
                 ],
               ),
             ],
